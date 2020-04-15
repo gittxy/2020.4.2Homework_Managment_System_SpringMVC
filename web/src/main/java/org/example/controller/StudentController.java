@@ -1,4 +1,9 @@
 package org.example.controller;
+import model.Homework;
+import model.Student;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -12,8 +17,10 @@ import java.sql.Timestamp;
 import jdbc.HomeworkJdbc;
 import model.StudentHomework;
 
+@ComponentScan("java")
 @Controller
 public class StudentController {
+    ApplicationContext applicationContext3 = new AnnotationConfigApplicationContext(StudentHomework.class);
 
     @RequestMapping("/StuSubmitHW")
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -28,7 +35,7 @@ public class StudentController {
         }else if(req.getParameter("homework_content").equals("")){
             resp.getWriter().println("作业内容不能为空,5s后返回初始界面");
         }else{
-            StudentHomework sh = new StudentHomework();
+            StudentHomework sh = (StudentHomework) applicationContext3.getBean("studentHw");
             sh.setStudentId(Long.parseLong(req.getParameter("student_id")));
             sh.setHomeworkId(Long.parseLong(req.getParameter("homework_id")));
             sh.setHomeworkTitle(req.getParameter("homework_title"));

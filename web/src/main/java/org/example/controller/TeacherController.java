@@ -22,7 +22,7 @@ import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.List;
 
-@ComponentScan("java.jdbc")
+@ComponentScan("java")
 @Controller
 public class TeacherController {
     ApplicationContext applicationContext = new AnnotationConfigApplicationContext(HomeworkJdbc.class);
@@ -30,7 +30,9 @@ public class TeacherController {
 
     ApplicationContext applicationContext2 = new AnnotationConfigApplicationContext(StudentJdbc.class);
     StudentJdbc stuJdbc = (StudentJdbc) applicationContext2.getBean("stuJdbc");
-    
+
+    ApplicationContext applicationContext3 = new AnnotationConfigApplicationContext(Homework.class);
+    ApplicationContext applicationContext4 = new AnnotationConfigApplicationContext(Student.class);
 
     @RequestMapping("/addhomework")
     protected void doPost1(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -42,7 +44,7 @@ public class TeacherController {
         }else if(req.getParameter("content").equals("")){
             resp.getWriter().println("作业内容不能为空,5s后返回初始界面");
         }else{
-            Homework th = new Homework();
+            Homework th = (Homework) applicationContext3.getBean("hw");
             th.setId(Long.parseLong(req.getParameter("id")));
             th.setTitle(req.getParameter("title"));
             th.setContent(req.getParameter("content"));
@@ -91,7 +93,7 @@ public class TeacherController {
         }else if(req.getParameter("name").equals("")){
             resp.getWriter().println("学生姓名不能为空,5s后返回初始界面");
         }else{
-            Student newStudent = new Student();
+            Student newStudent = (Student) applicationContext4.getBean("student");
             newStudent.setId(Long.parseLong(req.getParameter("id")));
             newStudent.setName(req.getParameter("name"));
             Timestamp dateNow=new Timestamp(System.currentTimeMillis());

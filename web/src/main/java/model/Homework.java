@@ -1,12 +1,21 @@
 package model;
 
+import jdbc.HomeworkJdbc;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import java.sql.Timestamp;
 
 /**
  * @Author:txy
  * @Date:created in 8:50 2020/3/8
  */
+@Configuration
 public class Homework {
+    @Bean(name = "hw")
+    public Homework getHomework() {
+        return new Homework();
+    }
+
     private Long id;
     private String title;
     private String content;

@@ -1,12 +1,20 @@
 package model;
 
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import java.sql.Timestamp;
 
 /**
  * @Author:txy
  * @Date:created in 8:50 2020/3/8
  */
+@Configuration
 public class Student {
+    @Bean(name = "student")
+    public Student getStudent() {
+        return new Student();
+    }
+
     private Long id;
     private String name;
     private Timestamp createTime;
