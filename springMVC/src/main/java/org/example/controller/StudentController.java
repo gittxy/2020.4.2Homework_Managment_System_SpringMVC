@@ -1,6 +1,4 @@
 package org.example.controller;
-import model.Homework;
-import model.Student;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
@@ -14,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.Timestamp;
 
-import jdbc.HomeworkJdbc;
+import dao.HomeworkDao;
 import model.StudentHomework;
 
 @ComponentScan("java")
@@ -46,7 +44,7 @@ public class StudentController {
 
 
             try {
-                resp.getWriter().println(HomeworkJdbc.handHomework(sh)+",5s后返回初始界面");
+                resp.getWriter().println(HomeworkDao.handHomework(sh)+",5s后返回初始界面");
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             }

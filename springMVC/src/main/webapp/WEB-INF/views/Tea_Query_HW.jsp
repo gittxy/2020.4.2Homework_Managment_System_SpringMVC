@@ -1,6 +1,6 @@
 <%@ page import="java.util.List" %>
 <%@ page import="model.Homework" %>
-<%@ page import="jdbc.HomeworkJdbc" %>
+<%@ page import="dao.HomeworkDao" %>
 <%@ page import="model.StudentHomework" %>
 <%--
   Created by IntelliJ IDEA.
@@ -26,7 +26,7 @@
         <td align="center">发布时间</td>
     </tr>
     <%
-        List<Homework> tlist = HomeworkJdbc.selectAllTeacherHomework();
+        List<Homework> tlist = HomeworkDao.selectAllTeacherHomework();
         if(null == tlist||tlist.size()<=0){
             out.println("None data.");
         }else{

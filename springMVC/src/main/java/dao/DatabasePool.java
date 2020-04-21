@@ -1,4 +1,4 @@
-package jdbc;
+package dao;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
@@ -17,11 +17,11 @@ public class DatabasePool {
         synchronized (DatabasePool.class) {
             if (null == hikariDataSource) {
                 HikariConfig hikariConfig = new HikariConfig();
-                String driverName = "com.mysql.cj.jdbc.Driver";
+                String driverName = "com.mysql.cj.dao.Driver";
                 hikariConfig.setUsername("root");
                 hikariConfig.setPassword("mysqlroot");
                 hikariConfig.setDriverClassName(driverName);
-                hikariConfig.setJdbcUrl("jdbc:mysql://127.0.0.1:3306/school?serverTimezone=UTC");
+                hikariConfig.setJdbcUrl("dao:mysql://127.0.0.1:3306/school?serverTimezone=UTC");
 
                 hikariDataSource = new HikariDataSource(hikariConfig);
                 return hikariDataSource;

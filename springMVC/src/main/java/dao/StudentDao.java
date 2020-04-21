@@ -1,4 +1,4 @@
-package jdbc;
+package dao;
 
 
 import model.Student;
@@ -14,16 +14,16 @@ import java.util.List;
  * @Date:created in 8:50 2020/3/8
  */
 @Configuration
-public class StudentJdbc {
+public class StudentDao {
     @Bean(name = "stuJdbc")
-    public StudentJdbc getStudentJdbc() {
-        return new StudentJdbc();
+    public StudentDao getStudentJdbc() {
+        return new StudentDao();
     }
 
     //老师添加学生
     public static boolean addStudent(Student newStudent) throws ClassNotFoundException {
-        String url="jdbc:mysql://127.0.0.1:3306/school?serverTimezone=UTC";
-        String drivername = "com.mysql.cj.jdbc.Driver";
+        String url="dao:mysql://127.0.0.1:3306/school?serverTimezone=UTC";
+        String drivername = "com.mysql.cj.dao.Driver";
         Class.forName(drivername);//可以省略
         boolean isSuccess = true;
         try (Connection connection = DatabasePool.getHikariDataSource().getConnection()) {
@@ -46,9 +46,9 @@ public class StudentJdbc {
 
     //查询所有的学生
     public static List<Student> selectAllStudent() throws ClassNotFoundException {
-        String url="jdbc:mysql://127.0.0.1:3306/school?serverTimezone=UTC";
+        String url="dao:mysql://127.0.0.1:3306/school?serverTimezone=UTC";
 
-        String drivername = "com.mysql.cj.jdbc.Driver";
+        String drivername = "com.mysql.cj.dao.Driver";
 
         String sqlString = "select * from student ";
 

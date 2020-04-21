@@ -1,4 +1,4 @@
-package jdbc;
+package dao;
 
 import model.Homework;
 import model.Student;
@@ -17,16 +17,16 @@ import java.util.List;
  * @Date:created in 8:50 2020/3/8
  */
 @Configuration
-public class HomeworkJdbc {
+public class HomeworkDao {
     @Bean(name = "hwJdbc")
-    public HomeworkJdbc getHomeworkJdbc() {
-        return new HomeworkJdbc();
+    public HomeworkDao getHomeworkJdbc() {
+        return new HomeworkDao();
     }
 
     //老师布置作业
     public static boolean addHomework(Homework th) throws ClassNotFoundException {
-        String url="jdbc:mysql://127.0.0.1:3306/school?serverTimezone=UTC";
-        String drivername = "com.mysql.cj.jdbc.Driver";
+        String url="dao:mysql://127.0.0.1:3306/school?serverTimezone=UTC";
+        String drivername = "com.mysql.cj.dao.Driver";
         Class.forName(drivername);//可以省略
         boolean isSuccess = true;
         try (Connection connection = DatabasePool.getHikariDataSource().getConnection()) {
@@ -50,9 +50,9 @@ public class HomeworkJdbc {
 
     //查询所有学生提交的作业
     public static List<StudentHomework> selectAllStudentHomework() throws ClassNotFoundException {
-        String url="jdbc:mysql://127.0.0.1:3306/school?serverTimezone=UTC";
+        String url="dao:mysql://127.0.0.1:3306/school?serverTimezone=UTC";
 
-        String drivername = "com.mysql.cj.jdbc.Driver";
+        String drivername = "com.mysql.cj.dao.Driver";
 
         String sqlString = "select * from student_homework ";
 
@@ -85,9 +85,9 @@ public class HomeworkJdbc {
     }
     //查询所有教师布置的作业
     public static List<Homework> selectAllTeacherHomework() throws ClassNotFoundException {
-        String url="jdbc:mysql://127.0.0.1:3306/school?serverTimezone=UTC";
+        String url="dao:mysql://127.0.0.1:3306/school?serverTimezone=UTC";
 
-        String drivername = "com.mysql.cj.jdbc.Driver";
+        String drivername = "com.mysql.cj.dao.Driver";
 
         String sqlString = "select * from homework ";
 
@@ -119,9 +119,9 @@ public class HomeworkJdbc {
 
     //查询某位学生提交的作业
     public static List<StudentHomework> selectAStudentHomework(Long student_id) throws ClassNotFoundException {
-        String url="jdbc:mysql://127.0.0.1:3306/school?serverTimezone=UTC";
+        String url="dao:mysql://127.0.0.1:3306/school?serverTimezone=UTC";
 
-        String drivername = "com.mysql.cj.jdbc.Driver";
+        String drivername = "com.mysql.cj.dao.Driver";
 
         String sqlString = "select * from student_homework where student_id="+student_id;
 
@@ -155,9 +155,9 @@ public class HomeworkJdbc {
 
     //查询某次作业的提交情况
     public static List<StudentHomework> selectAHomework(Long homework_id) throws ClassNotFoundException {
-        String url="jdbc:mysql://127.0.0.1:3306/school?serverTimezone=UTC";
+        String url="dao:mysql://127.0.0.1:3306/school?serverTimezone=UTC";
 
-        String drivername = "com.mysql.cj.jdbc.Driver";
+        String drivername = "com.mysql.cj.dao.Driver";
 
         String sqlString = "select * from student_homework where homework_id="+homework_id;
 
@@ -191,13 +191,13 @@ public class HomeworkJdbc {
 
    //学生提交作业
     public static String handHomework(StudentHomework sh) throws ClassNotFoundException {
-        String url="jdbc:mysql://127.0.0.1:3306/school?serverTimezone=UTC";
-        String drivername = "com.mysql.cj.jdbc.Driver";
+        String url="dao:mysql://127.0.0.1:3306/school?serverTimezone=UTC";
+        String drivername = "com.mysql.cj.dao.Driver";
         Class.forName(drivername);//可以省略
         String resp = "提交成功";
-        List<StudentHomework> shlist = HomeworkJdbc.selectAllStudentHomework();
-        List<Student> slist = StudentJdbc.selectAllStudent();
-        List<Homework> thlist = HomeworkJdbc.selectAllTeacherHomework();
+        List<StudentHomework> shlist = HomeworkDao.selectAllStudentHomework();
+        List<Student> slist = StudentDao.selectAllStudent();
+        List<Homework> thlist = HomeworkDao.selectAllTeacherHomework();
         boolean studentExist = false;
         boolean homeworkExist = false;
         //检查学生id是否存在

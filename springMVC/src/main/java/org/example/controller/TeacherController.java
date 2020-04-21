@@ -4,14 +4,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
 
-import jdbc.HomeworkJdbc;
+import dao.HomeworkDao;
 import model.Homework;
-import jdbc.StudentJdbc;
+import dao.StudentDao;
 import model.Student;
 import model.StudentHomework;
 
@@ -25,11 +22,11 @@ import java.util.List;
 @ComponentScan("java")
 @Controller
 public class TeacherController {
-    ApplicationContext applicationContext = new AnnotationConfigApplicationContext(HomeworkJdbc.class);
-    HomeworkJdbc hwJdbc = (HomeworkJdbc) applicationContext.getBean("hwJdbc");
+    ApplicationContext applicationContext = new AnnotationConfigApplicationContext(HomeworkDao.class);
+    HomeworkDao hwJdbc = (HomeworkDao) applicationContext.getBean("hwJdbc");
 
-    ApplicationContext applicationContext2 = new AnnotationConfigApplicationContext(StudentJdbc.class);
-    StudentJdbc stuJdbc = (StudentJdbc) applicationContext2.getBean("stuJdbc");
+    ApplicationContext applicationContext2 = new AnnotationConfigApplicationContext(StudentDao.class);
+    StudentDao stuJdbc = (StudentDao) applicationContext2.getBean("stuJdbc");
 
     ApplicationContext applicationContext3 = new AnnotationConfigApplicationContext(Homework.class);
     ApplicationContext applicationContext4 = new AnnotationConfigApplicationContext(Student.class);

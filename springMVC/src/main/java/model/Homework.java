@@ -1,6 +1,5 @@
 package model;
 
-import jdbc.HomeworkJdbc;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import java.sql.Timestamp;
