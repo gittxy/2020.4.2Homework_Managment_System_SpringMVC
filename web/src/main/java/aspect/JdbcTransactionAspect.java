@@ -4,15 +4,18 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import utils.TransactionUtil;
-
+/**
+ * @author: txy
+ * @Date: 2020/4/21 20:30
+ */
 @Aspect
-public class ProgramTransactionAspect {
+public class JdbcTransactionAspect {
     @Autowired(required = false)
     private TransactionUtil transactionUtil;
 
-    @Pointcut("execution(* com.roger.biz.service.impl..*.*(..))")
-    public void addTransaction(){
-           
+    @Pointcut("execution(* jdbc.*.*(..))")
+    public static void addTransaction(){
+
     }
 
     //异常通知：给添加事务的方法回滚事务，当方法抛出异常时
@@ -20,13 +23,16 @@ public class ProgramTransactionAspect {
     public void rollbackTransaction(){
         //获取当前事务，然后回滚
         transactionUtil.rollback();
+        System.out.println("事务已回退");
     }
 
     //环绕通知：给需要添加事务的方法，手动开启事务和提交事务
     @Around("addTransaction()")
     public void around(ProceedingJoinPoint joinPoint) throws Throwable{
         transactionUtil.begin();
+        System.out.println("事务已开启");
         joinPoint.proceed();
         transactionUtil.commit();
+        System.out.println("事务已提交");
     }
 }
