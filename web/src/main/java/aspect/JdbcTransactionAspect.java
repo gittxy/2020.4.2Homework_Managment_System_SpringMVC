@@ -4,10 +4,7 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import utils.TransactionUtil;
-/**
- * @author: txy
- * @Date: 2020/4/21 20:30
- */
+
 @Aspect
 public class JdbcTransactionAspect {
     @Autowired(required = false)
