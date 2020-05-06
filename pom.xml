@@ -12,6 +12,7 @@
         <module>web</module>
         <module>core</module>
         <module>db</module>
+        <module>springboot_demo</module>
     </modules>
     <dependencies>
         <dependency>
