@@ -2,22 +2,30 @@ package model;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import javax.persistence.*;
 import java.sql.Timestamp;
 
 /**
  * @Author:txy
  * @Date:created in 8:50 2020/3/8
  */
+@Entity
+@Table(name = "student")
 @Configuration
 public class Student {
-    @Bean(name = "student")
-    public Student getStudent() {
-        return new Student();
-    }
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
+
+    @Column(name = "name")
     private String name;
+
+    @Column(name = "create_time")
     private Timestamp createTime;
+
+    @Column(name = "update_time")
     private Timestamp updateTime;
 
     public Long getId() {

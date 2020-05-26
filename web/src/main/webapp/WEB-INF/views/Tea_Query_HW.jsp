@@ -1,6 +1,6 @@
 <%@ page import="java.util.List" %>
 <%@ page import="model.Homework" %>
-<%@ page import="jdbc.HomeworkJdbc" %>
+<%@ page import="dao.HomeworkJdbc" %>
 <%@ page import="model.StudentHomework" %>
 <%--
   Created by IntelliJ IDEA.

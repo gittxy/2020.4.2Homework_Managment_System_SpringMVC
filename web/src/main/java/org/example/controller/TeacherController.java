@@ -1,22 +1,18 @@
 package org.example.controller;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
 
-import jdbc.HomeworkJdbc;
 import model.Homework;
-import jdbc.StudentJdbc;
 import model.Student;
 import model.StudentHomework;
 import service.HomeworkService;
 import service.StudentService;
+
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -28,17 +24,13 @@ import java.util.List;
 @ComponentScan("java")
 @Controller
 public class TeacherController {
-    ApplicationContext applicationContext = new AnnotationConfigApplicationContext(StudentService.class);
-    StudentService stuService = (StudentService) applicationContext.getBean("stuService");
-
-    ApplicationContext applicationContext2 = new AnnotationConfigApplicationContext(HomeworkService.class);
-    HomeworkService hwService = (HomeworkService) applicationContext2.getBean("hwService");
-
-    ApplicationContext applicationContext3 = new AnnotationConfigApplicationContext(Homework.class);
-    ApplicationContext applicationContext4 = new AnnotationConfigApplicationContext(Student.class);
+    @Autowired
+    StudentService studentService;
+    @Autowired
+    HomeworkService homeworkService;
 
     @RequestMapping("/addhomework")
-    protected void doPost1(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void addHomework(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.setContentType("text/html;charset=UTF-8");
         if(req.getParameter("id").equals("")){
             resp.getWriter().println("作业编号不能为空,5s后返回初始界面");
@@ -47,40 +39,17 @@ public class TeacherController {
         }else if(req.getParameter("content").equals("")){
             resp.getWriter().println("作业内容不能为空,5s后返回初始界面");
         }else{
-            Homework th = (Homework) applicationContext3.getBean("hw");
+            Homework th = new Homework();
             th.setId(Long.parseLong(req.getParameter("id")));
             th.setTitle(req.getParameter("title"));
             th.setContent(req.getParameter("content"));
             Timestamp dateNow=new Timestamp(System.currentTimeMillis());
 
             th.setCreateTime(dateNow);
-            List<Homework> thList = null;
             try {
-                thList = hwService.selectAllTeacherHomework();
-            } catch (ClassNotFoundException e) {
+                resp.getWriter().println(homeworkService.addHomework(th));
+            } catch (Exception e) {
                 e.printStackTrace();
-            }
-            boolean isExist = false;
-            for(Homework h:thList){
-                if(th.getId()==h.getId()){
-                    isExist = true;
-                    break;
-                }
-            }
-
-            if(isExist){
-                resp.getWriter().println("id重复,5s后返回初始界面");
-            }else {
-                try {
-                    if(hwService.addHomework(th)){
-                        resp.getWriter().println("添加成功,5s后返回初始界面");
-                    }else {
-                        resp.getWriter().println("添加失败，请检查后再添加,5s后返回初始界面");
-                    }
-                } catch (ClassNotFoundException e) {
-                    e.printStackTrace();
-                }
-
             }
         }
 
@@ -88,7 +57,7 @@ public class TeacherController {
     }
 
     @RequestMapping("/addStudent")
-    protected void doPost2(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void addStudent(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         //解决中文乱码问题
         resp.setContentType("text/html;charset=UTF-8");
         if(req.getParameter("id").equals("")){
@@ -96,39 +65,22 @@ public class TeacherController {
         }else if(req.getParameter("name").equals("")){
             resp.getWriter().println("学生姓名不能为空,5s后返回初始界面");
         }else{
-            Student newStudent = (Student) applicationContext4.getBean("student");
+            Student newStudent = new Student();
             newStudent.setId(Long.parseLong(req.getParameter("id")));
             newStudent.setName(req.getParameter("name"));
             Timestamp dateNow=new Timestamp(System.currentTimeMillis());
 
             newStudent.setCreateTime(dateNow);
-            List<Student> studentList = null;
+            String response = "添加成功";
             try {
-                studentList = stuService.selectAllStudent();
-            } catch (ClassNotFoundException e) {
+                response = studentService.addStudent(newStudent);
+            } catch (Exception e) {
                 e.printStackTrace();
             }
-            boolean isExist = false;
-            for(Student s:studentList){
-                if( newStudent.getId().equals(s.getId())){
-                    isExist = true;
-                    break;
-                }
-            }
-
-            if(isExist){
-                resp.getWriter().println("学号重复,5s后返回初始界面");
-            }else {
-
-                try {
-                    if(stuService.addStudent(newStudent)){
-                        resp.getWriter().println("添加成功,5s后跳转");
-                    }else {
-                        resp.getWriter().println("添加失败，请检查后再添加,5s后返回初始界面");
-                    }
-                } catch (ClassNotFoundException e) {
-                    e.printStackTrace();
-                }
+            try {
+                resp.getWriter().println(response);
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
 
@@ -139,7 +91,7 @@ public class TeacherController {
     protected String doGet1(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         List<Homework> homeworkList = null;
         try {
-            homeworkList = hwService.selectAllTeacherHomework();
+            homeworkList = homeworkService.selectAllTeacherHomework();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
@@ -151,7 +103,7 @@ public class TeacherController {
     protected void doPost3(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         List<StudentHomework> studentHomeworkList = null;
         try {
-            studentHomeworkList = hwService.selectAHomework(Long.parseLong(req.getParameter("homework_id")));
+            studentHomeworkList = homeworkService.selectAHomework(Long.parseLong(req.getParameter("homework_id")));
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
@@ -163,7 +115,7 @@ public class TeacherController {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         List<StudentHomework> studentHomeworkList = null;
         try {
-            studentHomeworkList = hwService.selectAStudentHomework(Long.parseLong(req.getParameter("student_id")));
+            studentHomeworkList = homeworkService.selectAStudentHomework(Long.parseLong(req.getParameter("student_id")));
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
@@ -176,7 +128,7 @@ public class TeacherController {
     protected String doGet2(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         List<StudentHomework> studentHomeworkList = null;
         try {
-            studentHomeworkList = hwService.selectAllStudentHomework();
+            studentHomeworkList = homeworkService.selectAllStudentHomework();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
@@ -188,7 +140,7 @@ public class TeacherController {
     protected String doGet3(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         List<Student> list = null;
         try {
-            list = stuService.selectAllStudent();
+            list = studentService.selectAllStudent();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }

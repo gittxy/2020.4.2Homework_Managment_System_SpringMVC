@@ -3,25 +3,38 @@ package model;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import javax.persistence.*;
 import java.sql.Timestamp;
 
 /**
  * @Author:txy
  * @Date:created in 8:50 2020/3/8
  */
+@Entity
+@Table(name = "student_homework")
 @Configuration
 public class StudentHomework {
-    @Bean(name = "studentHw")
-    public StudentHomework getStudentHomework() {
-        return new StudentHomework();
-    }
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
+
+    @Column(name = "student_id")
     private Long studentId;
+
+    @Column(name = "homework_id")
     private Long homeworkId;
+
+    @Column(name = "homework_title")
     private String homeworkTitle;
+
+    @Column(name = "homework_content")
     private String homeworkContent;
+
+    @Column(name = "create_time")
     private Timestamp createTime;
+
+    @Column(name = "update_time")
     private Timestamp updateTime;
 
     public Long getId() {

@@ -10,7 +10,7 @@ public class JdbcTransactionAspect {
     @Autowired(required = false)
     private TransactionUtil transactionUtil;
 
-    @Pointcut("execution(* jdbc.*.*(..))")
+    @Pointcut("execution(* dao.*.*(..))")
     public static void addTransaction(){
 
     }

@@ -1,25 +1,34 @@
 package model;
 
-import jdbc.HomeworkJdbc;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Scope;
+import javax.persistence.*;
 import java.sql.Timestamp;
 
 /**
  * @Author:txy
  * @Date:created in 8:50 2020/3/8
  */
+@Entity
+@Table(name = "homework")
 @Configuration
 public class Homework {
-    @Bean(name = "hw")
-    public Homework getHomework() {
-        return new Homework();
-    }
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
+
+    @Column(name = "title")
     private String title;
+
+    @Column(name = "content")
     private String content;
+
+    @Column(name = "create_time")
     private Timestamp createTime;
+
+    @Column(name = "update_time")
     private Timestamp updateTime;
 
     public Long getId() {

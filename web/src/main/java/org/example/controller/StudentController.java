@@ -1,10 +1,8 @@
 package org.example.controller;
-import model.Homework;
-import model.Student;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -15,24 +13,17 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.Timestamp;
 
-import jdbc.HomeworkJdbc;
 import model.StudentHomework;
 import service.HomeworkService;
-import service.StudentService;
 
 @ComponentScan("java")
 @Controller
 public class StudentController {
-    ApplicationContext applicationContext = new AnnotationConfigApplicationContext(StudentService.class);
-    StudentService stuService = (StudentService) applicationContext.getBean("stuService");
-
-    ApplicationContext applicationContext2 = new AnnotationConfigApplicationContext(HomeworkService.class);
-    HomeworkService hwService = (HomeworkService) applicationContext2.getBean("hwService");
-
-    ApplicationContext applicationContext3 = new AnnotationConfigApplicationContext(StudentHomework.class);
-
+    @Autowired
+    HomeworkService homeworkService;
+    
     @RequestMapping("/StuSubmitHW")
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void stuSubmitHW(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         //解决中文乱码问题
         resp.setContentType("text/html;charset=UTF-8");
         if(req.getParameter("homework_id").equals("")){
@@ -44,7 +35,7 @@ public class StudentController {
         }else if(req.getParameter("homework_content").equals("")){
             resp.getWriter().println("作业内容不能为空,5s后返回初始界面");
         }else{
-            StudentHomework sh = (StudentHomework) applicationContext3.getBean("studentHw");
+            StudentHomework sh = new StudentHomework();
             sh.setStudentId(Long.parseLong(req.getParameter("student_id")));
             sh.setHomeworkId(Long.parseLong(req.getParameter("homework_id")));
             sh.setHomeworkTitle(req.getParameter("homework_title"));
@@ -55,7 +46,7 @@ public class StudentController {
 
 
             try {
-                resp.getWriter().println(hwService.handHomework(sh)+",5s后返回初始界面");
+                resp.getWriter().println(homeworkService.handHomework(sh)+",5s后返回初始界面");
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             }

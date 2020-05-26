@@ -47,4 +47,5 @@
         <property name="entityManagerFactory" ref="entityManagerFactory" />
     </bean>
     <jpa:repositories base-package="dao" entity-manager-factory-ref="entityManagerFactory" transaction-manager-ref="transactionManager" />
+    <jdbc:embedded-database id="dataSourceHikari"/>
 </beans>
