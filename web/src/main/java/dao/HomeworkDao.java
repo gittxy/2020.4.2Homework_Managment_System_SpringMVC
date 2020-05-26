@@ -1,4 +1,4 @@
-package dao;
+﻿package dao;
 
 import model.Homework;
 import model.StudentHomework;
@@ -13,7 +13,7 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.List;
 
-public interface HomeworkDao extends JpaRepository<StudentHomework,Long>{
+public interface HomeworkDao extends JpaRepository<Homework,Long>{
     /**
      * 学生提交作业
      * @param
